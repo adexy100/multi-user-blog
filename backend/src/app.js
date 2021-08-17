@@ -32,10 +32,12 @@ class Express {
     initializePassport(passport);
   }
 
-   initializeMiddlewares() {
+  initializeMiddlewares() {
     this.app.disable('x-powered-by');
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({
+      extended: true
+    }));
     this.app.use(cors(config.cors));
     this.app.set('trust proxy', 1);
     this.app.use(logger('dev'));
@@ -50,7 +52,7 @@ class Express {
     // readdirSync("./routes").map((r) => this.app.use("/api", require("./routes/" + r)));
 
     // catch 404 and forward to error handler
-    this.app.use(function (req, res, next) {
+    this.app.use(function(req, res, next) {
       next(createError(404));
     });
 
@@ -65,9 +67,9 @@ class Express {
         throw error;
       }
 
-      const bind = typeof config.server.port === 'string'
-        ? 'Pipe ' + config.server.port
-        : 'Port ' + config.server.port;
+      const bind = typeof config.server.port === 'string' ?
+        'Pipe ' + config.server.port :
+        'Port ' + config.server.port;
 
       // handle specific listen errors with friendly messages
       switch (error.code) {
@@ -86,9 +88,9 @@ class Express {
   onListening() {
     this.server.on('listening', () => {
       const addr = this.server.address();
-      const bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
+      const bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
 
       debug('Listening on ' + bind);
     })
