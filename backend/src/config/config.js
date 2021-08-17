@@ -1,9 +1,9 @@
 import connectMongo from 'connect-mongo';
 import session from 'express-session';
 import mongoose from 'mongoose';
-import path from 'path';
+// import path from 'path';
 import dotenv from "dotenv";
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 const MongoStore = connectMongo(session);
 const env = process.env.NODE_ENV || 'dev';
