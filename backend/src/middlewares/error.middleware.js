@@ -1,6 +1,5 @@
-
 const errorMiddleware = (err, req, res, next) => {
-    const { statusCode = 500, message = 'Internal Server Error' } = err;
+        const { statusCode = 500, message = 'Internal Server Error'} = err;
 
     if (err.name === 'MongoError' && err.code === 11000) { // Mongo error
         const field = Object.keys(err.keyValue);
@@ -14,7 +13,10 @@ const errorMiddleware = (err, req, res, next) => {
     }
 
     if (err.name === 'ValidationError') { // For mongoose validation error handler
-        const errors = Object.values(err.errors).map((el) => ({ message: el.message, path: el.path }));
+        const errors = Object.values(err.errors).map((el) => ({
+            message: el.message,
+            path: el.path
+        }));
 
         return res.status(400).json({
             statusCode: 400,
@@ -80,5 +82,4 @@ const errorMiddleware = (err, req, res, next) => {
     });
 }
 
-export { errorMiddleware as default };
-
+export default errorMiddleware;
