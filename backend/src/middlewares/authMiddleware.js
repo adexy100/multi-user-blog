@@ -10,3 +10,5 @@ export default authMiddleware = (req, res, next) => {
 		next();
 	});
 };
+
+export default requireSignin = expressJwt({ secret: process.env.JWT_SECRET }); // req.user
