@@ -1,9 +1,5 @@
-import {
-    ErrorHandler
-} from './middlewares';
-import Joi, {
-    Schema
-} from 'joi';
+import { ErrorHandler } from './middlewares';
+import Joi from 'joi';
 
 const email = Joi
     .string( )
@@ -50,6 +46,20 @@ export const schemas = {
         abortEarly: false
     } ),
     registerSchema: Joi.object( ).keys( {
+        email,
+        password,
+        username
+    } ).options( {
+        abortEarly: false
+    } ),
+    forgotPasswordSchema: Joi.object( ).keys( {
+        email,
+        password,
+        username
+    } ).options( {
+        abortEarly: false
+    } ),
+    resetPasswordSchema: Joi.object( ).keys( {
         email,
         password,
         username
