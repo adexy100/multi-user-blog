@@ -5,16 +5,13 @@ const expressJwt = require('express-jwt');
 const { registerEmailParams, forgotPasswordEmailParams } = require('../helpers/sendMail');
 const _ = require('lodash');
 const shortId = require('shortid');
+import config from '../config/config.js'
 
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
-});
+AWS.config.update(config.aws);
 
 const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
-exports.register = (req, res) => {
+export default register = (req, res) => {
     // console.log('REGISTER CONTROLLER', req.body);
     const { firstname, lastname, email, password } = req.body;
     // check if user exists in our db
@@ -50,7 +47,7 @@ exports.register = (req, res) => {
     });
 };
 
-exports.registerActivate = (req, res) => {
+export default registerActivate = (req, res) => {
     const { token } = req.body;
     // console.log(token);
     jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err, decoded) {
@@ -90,7 +87,7 @@ exports.registerActivate = (req, res) => {
     });
 };
 
-exports.login = (req, res) => {
+export default login = (req, res) => {
     const { email, password } = req.body;
     // console.table({ email, password });
     User.findOne({ email }).exec((err, user) => {
