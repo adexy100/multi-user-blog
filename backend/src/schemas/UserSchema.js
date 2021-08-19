@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Email is required."],
         lowercase: true,
         maxlength: 64,
+        trim: true,
         validate: {
             validator: (email) => {
                 const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -32,6 +33,8 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: [true, "Username is required."],
         lowercase: true,
+        index: true,
+        trim: true,
         minlength: 4,
         maxlength: 30,
         validate: {
@@ -56,10 +59,14 @@ const UserSchema = new mongoose.Schema({
     firstname: {
         type: String,
         maxlength: 40,
+        trim: true,
+        required: true
     },
     lastname: {
         type: String,
         maxlength: 50,
+        trim: true
+        required: true,
     },
     isEmailValidated: {
         type: Boolean,
