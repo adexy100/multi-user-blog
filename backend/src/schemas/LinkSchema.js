@@ -40,6 +40,12 @@ const LinkSchema = new mongoose.Schema({
             required: true
             }
         ],
+    channel: [
+        {
+            type: ObjectId,
+            ref: 'Channel',
+        }
+    ],
     type: {
         type: String,
         default: 'Free'

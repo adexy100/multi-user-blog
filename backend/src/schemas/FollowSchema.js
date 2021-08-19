@@ -9,9 +9,19 @@ const TopicFollowSchema = new Schema({
         ref: 'User',
         required: true
     },
-    target: {
+    user_target: {
+        type: ObjectId,
+        ref: 'User',
+        default: []
+    },
+    topic_target: {
         type: ObjectId,
         ref: 'Tag',
+        default: []
+    },
+    channel_target: {
+        type: ObjectId,
+        ref: 'Channel',
         default: []
     },
     {
@@ -26,5 +36,5 @@ const TopicFollowSchema = new Schema({
     }
 });
 
-const TopicFollow = mongoose.model('TopicFollow', TopicFollowSchema);
-export default TopicFollow;
+const Follow = mongoose.model('TopicFollow', FollowSchema);
+export default Follow;

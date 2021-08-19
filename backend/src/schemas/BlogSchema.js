@@ -16,7 +16,7 @@ const BlogSchema = new mongoose.Schema({
         unique: true,
         index: true
     },
-    body: {
+    content: {
         type: {},
         required: true,
         min: 200,
@@ -33,8 +33,9 @@ const BlogSchema = new mongoose.Schema({
         type: String
     },
     photo: {
-        url: String,
-        key: String
+        type: Object, // switched to cloudinary so I have to set as Object
+        default: {},
+        required: true
     },
     categories: [{
         type: ObjectId,
@@ -46,6 +47,10 @@ const BlogSchema = new mongoose.Schema({
         ref: 'Tag',
         required: true
     }],
+    channel: [{
+        type: ObjectId,
+        ref: 'Channel'
+    }],
     isEdited: {
         type: Boolean,
         default: false
@@ -53,7 +58,7 @@ const BlogSchema = new mongoose.Schema({
     privacy: {
         type: String,
         default: 'public',
-        enum: ['channel', 'public', 'private']
+        enum: ['public', 'private' 'follow']
     },
     blogReport: {
         type: String,
