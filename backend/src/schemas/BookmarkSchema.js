@@ -18,7 +18,6 @@ const BookmarkSchema = new mongoose.Schema({
         type: Date,
         required: true
     }
-
 }, {
     timestamps: true,
     toJSON: {
@@ -32,7 +31,7 @@ const BookmarkSchema = new mongoose.Schema({
 
 BookmarkSchema.virtual('blog', {
     ref: 'Blog',
-    localField: '_post_id',
+    localField: '_blog_id',
     foreignField: '_id',
     justOne: true
 });
