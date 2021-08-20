@@ -40,7 +40,7 @@ const username = Joi
 
 export const schemas = {
     loginSchema: Joi.object().keys({
-        username,
+        email,
         password
     }).options({
         abortEarly: false
