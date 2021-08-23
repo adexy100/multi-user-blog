@@ -57,8 +57,8 @@ const BlogSchema = new mongoose.Schema({
     },
     privacy: {
         type: String,
-        default: 'public',
-        enum: ['Publish', 'Draft']
+        default: 'Publish',
+        enum: ['Publish', 'Draft' 'Follower']
     },
     blogReport: {
         type: String,

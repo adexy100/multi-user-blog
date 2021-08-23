@@ -48,11 +48,20 @@ const LinkSchema = new mongoose.Schema({
     ],
     type: {
         type: String,
-        default: 'Free'
+        default: 'Free',
+        enum: [
+            "Free",
+            "Paid",
+        ],
     },
     medium: {
         type: String,
-        default: 'Video'
+        default: 'Video',
+        enum: [
+            "Video",
+            "Ebook",
+            "Article"
+        ],
     },
     clicks: {
         type: Number,

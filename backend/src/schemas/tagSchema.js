@@ -9,12 +9,12 @@ const TagSchema = new mongoose.Schema({
     trim: true,
     required: true,
     minlength: [2, "Too short"],
-    maxlength: [20, "Too long"],
+    maxlength: [50, "Too long"],
   },
   content: {
     type: {},
     min: [20, "Too short"],
-    max: [2000000, "Too long"]
+    max: [20000, "Too long"]
   },
 
   slug: {
