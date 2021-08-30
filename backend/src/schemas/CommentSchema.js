@@ -25,7 +25,7 @@ const options = {
 const CommentSchema = new mongoose.Schema({
     _post_id: {
         type: ObjectId,
-        ref: 'Post',
+        ref: 'Blog',
         required: true
     },
     parent: {
@@ -43,7 +43,7 @@ const CommentSchema = new mongoose.Schema({
     },
     body: String,
     _author_id: {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: 'User'
     },
     isEdited: {
@@ -61,5 +61,5 @@ CommentSchema.virtual('author', {
     justOne: true
 });
 
-const Comment = mongoose.model("Bookmark", CommentSchema)
+const Comment = mongoose.model("Comment", CommentSchema)
 export default Comment;

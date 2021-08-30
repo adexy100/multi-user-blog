@@ -16,7 +16,7 @@ const BlogSchema = new mongoose.Schema({
         unique: true,
         index: true
     },
-    content: {
+    body: {
         type: {},
         required: true,
         min: 200,
@@ -33,8 +33,8 @@ const BlogSchema = new mongoose.Schema({
         type: String
     },
     photo: {
-        type: Object, // switched to cloudinary so I have to set as Object
-        default: {},
+        url: String,
+        key: String
         required: true
     },
     categories: [{
@@ -76,7 +76,22 @@ const BlogSchema = new mongoose.Schema({
         required: true
     }
 }, {
-    timestamps: true
+    timestamps: true, toJSON: { virtuals: true }, toObject: { getters: true, virtuals: true } });
+
+BlogSchema.virtual('author', {
+    ref: 'User',
+    localField: 'postedBy',
+    foreignField: '_id',
+    justOne: true
 });
 
-module.exports = mongoose.model('Blog', blogSchema);
+BlogSchema.methods.isPostLiked = function (this, userID) {
+    if (!isValidObjectId(userID)) return;
+
+    return this.likes.some(user => {
+        return user._id.toString() === userID.toString();
+    });
+}
+
+const Blog = mongoose.model('Blog', BlogSchema);
+export default Blog;

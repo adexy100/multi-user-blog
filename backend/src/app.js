@@ -13,7 +13,7 @@ import config from './config/config.js';
 import initializePassport from './config/passport.js';
 import initializeSocket from './config/socket.js';
 import initializeDB from './db/db.js';
-import errorHandler from './middlewares/error.middleware.js';
+import errorHandler from './middlewares/errorMiddleware.js';
 import auth from './routes/auth.js';
 // import { readdirSync } from 'fs';
 
