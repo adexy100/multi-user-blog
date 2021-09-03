@@ -1,34 +1,35 @@
 import mongoose from "mongoose";
-const {
-    ObjectId
-} = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
-const LikeSchema = new mongoose.Schema({
+const LikeSchema = new mongoose.Schema(
+  {
     type: {
-        type: String,
-        required: true,
-        enum: ['Post', 'Comment', 'Link']
+      type: String,
+      required: true,
+      enum: ["Post", "Comment", "Link"],
     },
     target: {
-        type: ObjectId,
-        refPath: 'type',
-        required: true
+      type: ObjectId,
+      refPath: "type",
+      required: true,
     },
     user: {
-        type: ObjectId,
-        ref: 'User',
-        required: true
-    }
-}, {
+      type: ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
     timestamps: true,
     toJSON: {
-        virtuals: true
+      virtuals: true,
     },
     toObject: {
-        getters: true,
-        virtuals: true
-    }
-});
+      getters: true,
+      virtuals: true,
+    },
+  }
+);
 
 const Like = mongoose.model("Like", LikeSchema);
 

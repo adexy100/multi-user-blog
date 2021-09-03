@@ -1,5 +1,5 @@
 import Tag from "../schemas/TagSchema.js";
-import Product from "../schemas/BlogSchema.js";
+import Post from "../schemas/PostSchema.js";
 import slugify from "slugify";
 
 export const create = async (req, res) => {
@@ -30,13 +30,13 @@ export const list = async (req, res) => {
 
 export const read = async (req, res) => {
   let tags = await tags.findOne({ slug: req.params.slug }).exec();
-  const blogs = await Product.find({ tags: tags })
+  const posts = await Post.find({ tags: tags })
     .populate("tags")
     .exec();
 
   res.json({
     tags,
-    blogs,
+    posts,
   });
 };
 

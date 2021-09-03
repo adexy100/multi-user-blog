@@ -1,35 +1,35 @@
 import mongoose from "mongoose";
-const {
-    ObjectId
-} = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
-const TopicFollowSchema = new Schema({
+const TopicFollowSchema = new Schema(
+  {
     user: {
-        type: ObjectId,
-        ref: 'User',
-        required: true
+      type: ObjectId,
+      ref: "User",
+      required: true,
     },
     user_target: {
-        type: ObjectId,
-        ref: 'User',
-        default: []
+      type: ObjectId,
+      ref: "User",
+      default: [],
     },
     channel_target: {
-        type: ObjectId,
-        ref: 'Channel',
-        default: []
+      type: ObjectId,
+      ref: "Channel",
+      default: [],
     },
-    {
-        timestamps: true,
-        toJSON: {
-            virtuals: true
-        },
-        toObject: {
-            getters: true,
-            virtuals: true
-        }
-    }
-});
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      getters: true,
+      virtuals: true,
+    },
+  }
+);
 
-const Follow = mongoose.model('TopicFollow', FollowSchema);
+const Follow = mongoose.model("TopicFollow", FollowSchema);
 export default Follow;

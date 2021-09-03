@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
-const {
-    ObjectId
-} = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 const PostSchema = new mongoose.Schema({
     title: {
@@ -34,7 +32,7 @@ const PostSchema = new mongoose.Schema({
     },
     photo: {
         url: String,
-        key: String
+        key: String,
         required: true
     },
     categories: [{
@@ -58,7 +56,7 @@ const PostSchema = new mongoose.Schema({
     privacy: {
         type: String,
         default: 'Publish',
-        enum: ['Publish', 'Draft' 'Follower']
+        enum: ['Publish', 'Draft', 'Follower']
     },
     postReport: {
         type: String,
@@ -72,11 +70,13 @@ const PostSchema = new mongoose.Schema({
     },
     _author_id: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'User',
         required: true
     }
 }, {
-    timestamps: true, toJSON: { virtuals: true }, toObject: { getters: true, virtuals: true } });
+    timestamps: true, toJSON: { virtuals: true }, toObject: { getters: true, virtuals: true } 
+    }
+);
 
 PostSchema.virtual('author', {
     ref: 'User',
