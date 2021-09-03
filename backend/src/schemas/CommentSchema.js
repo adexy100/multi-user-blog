@@ -23,7 +23,7 @@ const options = {
 }
 
 const CommentSchema = new mongoose.Schema({
-    _post_id: {
+    _blog_id: {
         type: ObjectId,
         ref: 'Blog',
         required: true

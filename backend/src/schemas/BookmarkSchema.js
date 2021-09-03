@@ -6,7 +6,7 @@ const {
 const BookmarkSchema = new mongoose.Schema({
     _post_id: {
         type: ObjectId,
-        ref: 'Blog',
+        ref: 'Post',
         required: true
     },
     _author_id: {
@@ -30,7 +30,7 @@ const BookmarkSchema = new mongoose.Schema({
 });
 
 BookmarkSchema.virtual('blog', {
-    ref: 'Blog',
+    ref: 'Post',
     localField: '_blog_id',
     foreignField: '_id',
     justOne: true

@@ -9,15 +9,15 @@ const NewsFeedSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    topic_follow: {
+    channel: {
         type: ObjectId,
         required: true,
-        ref: 'Tag'
+        ref: 'Channel'
     },
     post: {
         type: ObjectId,
         required: true,
-        ref: 'Blog'
+        ref: 'Post'
     },
     post_owner: {
         type: ObjectId,

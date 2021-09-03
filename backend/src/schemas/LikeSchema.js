@@ -7,7 +7,7 @@ const LikeSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['Post', 'Comment']
+        enum: ['Post', 'Comment', 'Link']
     },
     target: {
         type: ObjectId,

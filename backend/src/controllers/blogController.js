@@ -18,7 +18,7 @@ import { makeResponseJson } from '../helpers/utils';
 AWS.config.update(config.aws);
 const s3 = new AWS.S3();
 
-export const create = (req, res, next) async => {
+export const create = async (req, res, next) => {
 
    try { 
        const { title, body, photo, privacy, categories, tags, channel } = req.body;
@@ -138,9 +138,9 @@ export const read = async (req, res, next) => {
         });
 };
 
-export const remove = (req, res) => {
+export const remove = async (req, res) => {
     const slug = req.params.slug.toLowerCase();
-    Blog.findOneAndRemove({ slug }).exec((err, data) => {
+    await Blog.findOneAndRemove({ slug }).exec((err, data) => {
         if (err) return next(new ErrorHandler(404, 'Cannot remove'));
         res.json({
             message: 'Blog deleted successfully'

@@ -3,7 +3,7 @@ const {
     ObjectId
 } = mongoose.Schema;
 
-const BlogSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     title: {
         type: String,
         trim: true,
@@ -60,7 +60,7 @@ const BlogSchema = new mongoose.Schema({
         default: 'Publish',
         enum: ['Publish', 'Draft' 'Follower']
     },
-    blogReport: {
+    postReport: {
         type: String,
         enum: [
         "Inappropraite content",
@@ -70,7 +70,7 @@ const BlogSchema = new mongoose.Schema({
         "Not interested",
       ],
     },
-    postedBy: {
+    _author_id: {
         type: ObjectId,
         ref: 'User'
         required: true
@@ -78,14 +78,14 @@ const BlogSchema = new mongoose.Schema({
 }, {
     timestamps: true, toJSON: { virtuals: true }, toObject: { getters: true, virtuals: true } });
 
-BlogSchema.virtual('author', {
+PostSchema.virtual('author', {
     ref: 'User',
-    localField: 'postedBy',
+    localField: '_author_id',
     foreignField: '_id',
     justOne: true
 });
 
-BlogSchema.methods.isPostLiked = function (this, userID) {
+PostSchema.methods.isPostLiked = function (this, userID) {
     if (!isValidObjectId(userID)) return;
 
     return this.likes.some(user => {
@@ -93,5 +93,5 @@ BlogSchema.methods.isPostLiked = function (this, userID) {
     });
 }
 
-const Blog = mongoose.model('Blog', BlogSchema);
-export default Blog;
+const Post = mongoose.model('Post', PostSchema);
+export default Post;

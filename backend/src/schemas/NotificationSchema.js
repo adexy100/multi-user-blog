@@ -3,6 +3,14 @@ const {
     ObjectId
 } = mongoose.Schema;
 
+export enum ENotificationType {
+    follow = 'follow',
+    like = 'like',
+    commentLike = 'comment-like',
+    comment = 'comment',
+    reply = 'reply'
+}
+
 const NotificationSchema = new mongoose.Schema({
     type: {
         type: String,

@@ -14,11 +14,6 @@ const TopicFollowSchema = new Schema({
         ref: 'User',
         default: []
     },
-    topic_target: {
-        type: ObjectId,
-        ref: 'Tag',
-        default: []
-    },
     channel_target: {
         type: ObjectId,
         ref: 'Channel',
