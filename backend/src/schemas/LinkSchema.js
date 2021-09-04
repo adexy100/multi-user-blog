@@ -53,7 +53,7 @@ const LinkSchema = new mongoose.Schema(
     medium: {
       type: String,
       default: "Video",
-      enum: ["Video", "Ebook", "Article"],
+      enum: ['Video', 'Ebook', 'Article'],
     },
     clicks: {
       type: Number,

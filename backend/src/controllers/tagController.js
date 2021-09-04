@@ -30,13 +30,16 @@ export const list = async (req, res) => {
 
 export const read = async (req, res) => {
   let tags = await tags.findOne({ slug: req.params.slug }).exec();
-  const posts = await Post.find({ tags: tags })
+  const posts = await Post.find({ tags: tags });
+  const links = await Link.find({ tags: tags })
+
     .populate("tags")
     .exec();
 
   res.json({
     tags,
     posts,
+    links
   });
 };
 

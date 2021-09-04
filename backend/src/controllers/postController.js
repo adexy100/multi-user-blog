@@ -8,7 +8,7 @@ import Post from "../schemas/PostSchema.js";
 import Category from "../schemas/CategorySchema.js";
 import Tag from "../schemas/TagSchema.js";
 import User from "../schemas/UserSchema.js";
-import ErrorHandler from "../middlewares/errorMiddleware.js";
+import ErrorHandler from "../middlewares";
 import { smartTrim } from "../helpers/blog";
 import config from "../config/config.js";
 import { Types } from "mongoose";
@@ -360,4 +360,17 @@ export const getLikes = async (req, res, next) => {
       console.log('CANT GET POST LIKERS', e);
       next(e);
   }
+};
+
+export const clickCheck = (req, res) => {
+    const { linkId } = req.body;
+    Post.findByIdAndUpdate(linkId, { $inc: { clicks: 1 } }, { upsert: true, new: true }).exec((err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+                error: 'Could not update view count'
+            });
+        }
+        res.json(result);
+    });
 };

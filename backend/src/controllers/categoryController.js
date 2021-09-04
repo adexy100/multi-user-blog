@@ -1,6 +1,7 @@
 import Category from "../schemas/CategorySchema.js";
 import Tag from "../schemas/TagSchema.js";
 import Post from "../schemas/PostSchema.js";
+import Link from "../schemas/LinkSchema.js";
 import slugify from "slugify";
 
 export const create = async (req, res) => {
@@ -33,10 +34,12 @@ export const read = async (req, res) => {
   let category = await Category.findOne({ slug: req.params.slug }).exec();
 
   const posts = await Post.find({ category }).populate("categories").exec();
+  const links = await Link.find({ category }).populate("categories").exec();
 
   res.json({
     category,
     posts,
+    links
   });
 };
 
