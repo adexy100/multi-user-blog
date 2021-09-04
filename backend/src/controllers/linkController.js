@@ -1,11 +1,13 @@
 import slugify from 'slugify';
 import Link from '../schemas';
+import { uploadImage } from '../storage/cloudinary.js';
 
 exports.create = (req, res) => {
     const { title, url, categories, type, medium } = req.body;
+    const result = uploadImage({ file: req.body.image, folder: 'link'});
     // console.table({ title, url, categories, type, medium });
     const slug = url;
-    let link = new Link({ title, url, categories, tags, type, medium, slug });
+    let link = new Link({ title, url, categories, tags, type, medium, slug, image: result });
     // posted by user
     link.postedBy = req.user._id;
     // save link

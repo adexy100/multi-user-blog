@@ -9,6 +9,10 @@ const LinkSchema = new mongoose.Schema(
       required: true,
       max: 256,
     },
+    image: {
+      type: Object,
+      default: {},
+    },
     url: {
       type: String,
       trim: true,
