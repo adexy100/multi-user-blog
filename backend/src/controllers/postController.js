@@ -244,3 +244,120 @@ export const update = async (req, res, next) => {
     next(e);
   }
 };
+
+export const postLike = async (req, res, next) => {
+  try {
+      const { post_id } = req.params;
+
+      const post = await Post.findById(post_id);
+
+      if (!post) return next(new ErrorHandler(400, 'Post not found.'));
+
+      let state = false; // the state whether isLiked = true | false to be sent back to user
+      const query = {
+          target: Types.ObjectId(post_id),
+          user: req.user._id,
+          type: 'Post'
+      };
+
+      const likedPost = await Like.findOne(query); // Check if already liked post
+
+      if (!likedPost) { // If not liked, save new like and notify post owner
+          const like = new Like({
+              type: 'Post',
+              target: post._id,
+              user: req.user._id
+          });
+
+          await like.save();
+          state = true;
+
+          // If not the post owner, send notification to post owner
+          if (post._author_id.toString() !== req.user._id.toString()) {
+              const io = req.app.get('io');
+              const targetUserID = Types.ObjectId(post._author_id);
+              const newNotif = {
+                  type: ENotificationType.like,
+                  initiator: req.user._id,
+                  target: targetUserID,
+                  link: `/post/${post_id}`,
+              };
+              const notificationExists = await Notification.findOne(newNotif);
+
+              if (!notificationExists) {
+                  const notification = new Notification({ ...newNotif, createdAt: Date.now() });
+
+                  const doc = await notification.save();
+                  await doc
+                      .populate({
+                          path: 'target initiator',
+                          select: 'fullname profilePicture username'
+                      })
+                      .execPopulate();
+
+                  io.to(targetUserID).emit('newNotification', { notification: doc, count: 1 });
+              } else {
+                  await Notification.findOneAndUpdate(newNotif, { $set: { createdAt: Date.now() } });
+              }
+          }
+      } else {
+          await Like.findOneAndDelete(query);
+          state = false;
+      }
+
+      const likesCount = await Like.find({ target: Types.ObjectId(post_id) });
+
+      res.status(200).send(makeResponseJson({ state, likesCount: likesCount.length }));
+  } catch (e) {
+      console.log(e);
+      next(e);
+  }
+};
+
+export const getLikes = async (req, res, next) => {
+  try {
+      const { post_id } = req.params;
+      const offset = parseInt(req.query.offset as string) || 0;
+      const limit = LIKES_LIMIT;
+      const skip = offset * limit;
+
+      const exist = await Post.findById(Types.ObjectId(post_id));
+      if (!exist) return next(new ErrorHandler(400, 'Post not found.'));
+
+      const likers = await Like
+          .find({
+              target: Types.ObjectId(post_id),
+              type: 'Post'
+          })
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit)
+          .populate({
+              path: 'user',
+              select: 'profilePicture username fullname'
+          })
+
+      if (likers.length === 0 && offset < 1) {
+          return next(new ErrorHandler(404, 'No likes found.'));
+      }
+
+      if (likers.length === 0 && offset > 0) {
+          return next(new ErrorHandler(404, 'No more likes found.'));
+      }
+
+      const myFollowingDoc = await Follow.find({ user: req.user._id });
+      const myFollowing = myFollowingDoc.map(user => user.target);
+
+      const result = likers.map((like) => {
+          return {
+              ...like.user.toObject(),
+              isFollowing: myFollowing.includes(like.user.id)
+          }
+      });
+
+      res.status(200).send(makeResponseJson(result));
+  } catch (e) {
+      console.log('CANT GET POST LIKERS', e);
+      next(e);
+  }
+};
