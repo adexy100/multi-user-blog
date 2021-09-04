@@ -76,7 +76,27 @@ const UserSchema = new mongoose.Schema(
     info: {
       bio: {
         type: String,
-        maxlength: 400,
+        maxlength: 1000,
+        default: "",
+      },
+      facebook: {
+        type: String,
+        maxlength: 100,
+        default: "",
+      },
+      twitter: {
+        type: String,
+        maxlength: 100,
+        default: "",
+      },
+      linkedIn: {
+        type: String,
+        maxlength: 100,
+        default: "",
+      },
+      website: {
+        type: String,
+        maxlength: 100,
         default: "",
       },
       gender: {
