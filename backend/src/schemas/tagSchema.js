@@ -1,41 +1,21 @@
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Schema;
+import mongoose from 'mongoose';
 
 const TagSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      trim: true,
-      required: true,
-      minlength: [2, "Too short"],
-      maxlength: [50, "Too long"],
+    {
+        name: {
+            type: String,
+            trim: true,
+            required: true,
+            maxlength: 32
+        },
+        slug: {
+            type: String,
+            unique: true,
+            index: true
+        }
     },
-    content: {
-      type: {},
-      min: [20, "Too short"],
-      max: [20000, "Too long"],
-    },
-
-    slug: {
-      type: String,
-      unique: true,
-      lowercase: true,
-      index: true,
-    },
-    parent: {
-      type: ObjectId,
-      ref: "Category",
-    },
-    clicks_check: {
-      type: Number,
-      default: 0,
-    },
-  },
-  {
-    timestamps: true,
-  }
+    { timestamps: true }
 );
 
-const Tag = mongoose.model("Tag", TagSchema);
-
-export default Tag;
+const Tag = mongoose.model('Tag', TagSchema);
+export const Tag;

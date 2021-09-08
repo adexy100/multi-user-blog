@@ -1,73 +1,78 @@
-import Tag from "../schemas/TagSchema.js";
-import Post from "../schemas/PostSchema.js";
-import slugify from "slugify";
+import sugify from 'slugify';
+import Tag from '../schemas';
+import Post from '../schemas';
+import ErrorHandler from "../middlewares";
 
 export const create = async (req, res) => {
-  try {
-    const { name, desc, parent } = req.body;
-    const sub = await new Sub({
-      name,
-      desc,
-      parent,
-      slug: slugify(name),
-    }).save();
-    if (sub) {
-      res.status(201).json(sub);
-    } else {
-      res.status(400);
-      throw new Error("Tag already exist");
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Create Tag failed");
-  }
+    const { name } = req.body;
+    let slug = slugify(name).toLowerCase();
+
+    let tag = new Tag({ name, slug });
+
+    await tag.save((err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data); // dont do this res.json({ tag: data });
+    });
 };
 
 export const list = async (req, res) => {
-  const subs = await Sub.find({}).sort({ createdAt: -1 }).exec();
-  res.json(subs);
+    await Tag.find({}).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
 };
 
-export const read = async (req, res) => {
-  let tags = await tags.findOne({ slug: req.params.slug }).exec();
-  const posts = await Post.find({ tags: tags });
-  const links = await Link.find({ tags: tags })
+export const read = async (req, res, next) => {
+    const slug = req.params.slug.toLowerCase();
 
-    .populate("tags")
-    .exec();
+    await Tag.findOne({ slug }).exec((err, tag) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Tag not found'
+            });
+        }
+        // res.json(tag);
+    const posts = await Post.find({ tags: tag })
+            .populate('topics', '_id name slug')
+            .populate('tags', '_id name slug')
+            .populate('postedBy', '_id name')
+            .select('_id title slug excerpt topics postedBy tags createdAt updatedAt')
+            .exec();
+    if (!posts) return next(new ErrorHandler(400, "Post not found"));
+    const links = await Link.find({ tags: tag })
+            .populate('topics', '_id name slug')
+            .populate('tags', '_id name slug')
+            .populate('postedBy', '_id name')
+            .select('_id title slug topics postedBy tags createdAt updatedAt')
+            .exec();
+    if (!links) return next(new ErrorHandler(400, "Link not found"));
 
-  res.json({
-    tags,
-    posts,
-    links
-  });
+    res.json({
+        posts,
+        links
+    })      
 };
 
-export const update = async (req, res) => {
-  const { name, desc, parent } = req.body;
-  const newData = {
-    name,
-    desc,
-    parent,
-    slug: slugify(name),
-  };
-  try {
-    const updated = await Tag.findOneAndUpdate(
-      { slug: req.params.slug },
-      newData,
-      { new: true }
-    );
-    res.json(updated);
-  } catch (err) {
-    res.status(400).send("Tag update failed");
-  }
-};
+export const remove = (req, res) => {
+    const slug = req.params.slug.toLowerCase();
 
-export const remove = async (req, res) => {
-  try {
-    const deleted = await Tag.findOneAndDelete({ slug: req.params.slug });
-    res.json(deleted);
-  } catch (err) {
-    res.status(400).send("Tag delete failed");
-  }
+    Tag.findOneAndRemove({ slug }).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json({
+            message: 'Tag deleted successfully'
+        });
+    });
 };

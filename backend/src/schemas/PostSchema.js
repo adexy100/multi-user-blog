@@ -40,10 +40,14 @@ const PostSchema = new mongoose.Schema({
         ref: 'Category',
         required: true
     }],
+    topics: [{
+        type: ObjectId,
+        ref: 'Topic',
+        required: true
+    }],
     tags: [{
         type: ObjectId,
         ref: 'Tag',
-        required: true
     }],
     channel: [{
         type: ObjectId,
